@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\Student;
 use App\Repositories\StudentRepository;
 
 class StudentController extends Controller
@@ -9,8 +10,11 @@ class StudentController extends Controller
     /**
      * @param  StudentRepository  $studentRepository
      */
-    public function __construct(private readonly StudentRepository $studentRepository)
+    private StudentRepository $studentRepository;
+
+    public function __construct()
     {
+        $this->studentRepository = new StudentRepository(new Student());
     }
 
     /**

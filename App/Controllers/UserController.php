@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\User;
 use App\Repositories\UserRepository;
 use App\Validations\LoginRequest;
 
@@ -10,8 +11,11 @@ class UserController extends Controller
     /**
      * @param  UserRepository  $userRepository
      */
-    public function __construct(private readonly UserRepository $userRepository)
+    private UserRepository $userRepository;
+
+    public function __construct()
     {
+        $this->userRepository = new UserRepository(new User());
     }
 
     /**

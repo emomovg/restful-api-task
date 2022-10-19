@@ -20,10 +20,10 @@ class UserRepository
     public function login(array $data):void
     {
         $_SESSION['auth'] = true;
+        $login = $data['login'];
 
         if (isset($data['remember']) && $data['remember'] === true) {
             $token = uniqid();
-            $login = $data['login'];
             CookieService::set('token', $token,COOKIE_LIVE_TIME);
             $this->user->updateTokenByLogin($login,$token);
         }

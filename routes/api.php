@@ -1,34 +1,18 @@
 <?php
 
-use App\Controllers\Controller;
-use App\Controllers\StudentController;
-use App\Controllers\UserController;
-use App\Models\Student;
-use App\Models\User;
-use App\Repositories\StudentRepository;
-use App\Repositories\UserRepository;
-use App\Middleware\Authenticate;
+use App\Routes\Router;
 
-$route = explode('/',
-    $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))[1];
+/**
+ * @return array
+ */
+function runApiRoutes(): array
+{
+    $router = new Router();
 
-$method = $_SERVER['REQUEST_METHOD'];
+    $router->post('/auth', \App\Controllers\UserController::class.'::login');
+    $router->delete('/auth', \App\Controllers\UserController::class.'::logout');
+    $router->get('/students', \App\Controllers\StudentController::class.'::getStudents')
+        ->middleware('\App\Middleware\Authenticate');
 
-$userController = new UserController(new UserRepository(new User()));
-
-$response = match ($route) {
-    'auth' => match ($method) {
-        'POST' => $userController->login(),
-        'DELETE' => $userController->logout(),
-        default => Controller::response(404, 'Route does not exists'),
-    },
-    'students' => match ($method) {
-        'GET' => Authenticate::handle([new StudentController(new StudentRepository(new Student())), 'getStudents']),
-        default => Controller::response(404,'Route does not exists'),
-    },
-    default => Controller::response(404, 'Route does not exists')
-};
-
-http_response_code($response['code']);
-
-echo json_encode($response);
+    return $router->run();
+}
