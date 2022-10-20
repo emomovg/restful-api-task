@@ -27,9 +27,11 @@ class User extends Model
      */
     public function updateTokenByLogin(string $login, string $token): void
     {
-        $this->connection->query("
+        $this->connection->prepare(
+            "
             UPDATE {$this->table} 
-                SET token = '{$token}'
-            WHERE login = '{$login}'");
+                SET token=?
+            WHERE login=?"
+        )->execute([$token, $login]);
     }
 }

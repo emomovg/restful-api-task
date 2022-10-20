@@ -46,16 +46,10 @@ class Model
      */
     public function delete(string $field, int|string $value): void
     {
-        $this->connection->query("DELETE FROM `{$this->table}` WHERE {$field} = '{$value}'");
-    }
-
-    /**
-     * @param  array  $fields
-     * @param  array  $values
-     * @return void
-     */
-    public function update(array $fields, array $values): void
-    {
+        $this->connection->prepare(
+            "DELETE FROM `{$this->table}` WHERE {$field}=?"
+        )
+            ->execute([$value]);
     }
 
     /**
@@ -71,13 +65,16 @@ class Model
      * @param  int|string  $value
      * @return array
      */
-    public function getAllByField(string $field, int|string $value): array
+    public function getAllByField(string $field, int|string $value)
     {
-        return $this->connection->query(
+        $sth = $this->connection->prepare(
             " SELECT * 
             FROM `{$this->table}` 
-            WHERE {$field} = '{$value}'"
-        )->fetchAll(PDO::FETCH_ASSOC);
+            WHERE {$field} =?"
+        );
+        $sth->execute([$value]);
+
+        return $sth->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -87,11 +84,14 @@ class Model
      */
     public function getOneByField(string $field, int|string $value): array
     {
-        $result = $this->connection->query(
+        $sth = $this->connection->prepare(
             " SELECT * 
             FROM `{$this->table}`
-            WHERE {$field} = '{$value}' LIMIT 1"
-        )->fetchAll(PDO::FETCH_ASSOC);
+            WHERE {$field} =?  LIMIT 1"
+        );
+        $sth->execute([$value]);
+
+        $result = $sth->fetchAll(PDO::FETCH_ASSOC);
 
         return $result ? $result[0] : [];
     }
@@ -103,11 +103,16 @@ class Model
      */
     public function paginate(int $offset, int $limit): array
     {
-        return $this->connection->query(
+        $sth = $this->connection->prepare(
             " SELECT * 
             FROM `{$this->table}` 
-            LIMIT {$offset},{$limit}"
-        )->fetchAll(PDO::FETCH_ASSOC);
+            LIMIT :limit OFFSET :offset "
+        );
+        $sth->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $sth->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $sth->execute();
+
+        return $sth->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**

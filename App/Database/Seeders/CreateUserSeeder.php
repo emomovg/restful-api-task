@@ -22,6 +22,14 @@ class CreateUserSeeder extends Seeder
             ];
         }
 
+        $userData[] = [
+            'user_login',
+            'user_name',
+            'user_email@gmail.com',
+            password_hash('user_password', PASSWORD_DEFAULT),
+            uniqid()
+        ];
+
         (new User())->create($userData);
     }
 }

@@ -28,7 +28,7 @@ class UserRepository
             $this->user->updateTokenByLogin($login,$token);
         }
 
-        Logger::info('Пользователь '.$login.' залогинился в '. date('Y-m-d H:i:s'),'auth');
+        Logger::info('User '.$login.'logged in '. date('Y-m-d H:i:s'),'auth');
     }
 
     /**

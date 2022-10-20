@@ -19,12 +19,12 @@ class LoginRequest
         $user = (new User())->getOneByField('login', $login);
 
         if (!$user) {
-            $this->message = 'Пользователя с таким логином не существует';
+            $this->message = 'The user with this login does not exist';
             return false;
         }
 
         if (!password_verify($password, $user['password'])) {
-            $this->message = 'Неправильно введен пароль';
+            $this->message = 'Incorrect password entered ';
             return false;
         }
 
