@@ -12,7 +12,7 @@
 ### `php -f App/Database/Migrations/run_migration.php`
 ### `php -f App/Database/Seeders/run_seeder.php`
 
-## User Data for testing
+## User's Data for testing
 
 * Login: user_login
 * Password: user_password
