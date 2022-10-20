@@ -1,9 +1,9 @@
 <?php
 
 const  DATABASE = [
-    'host' => 'localhost',
+    'host' => 'db',
     'port' => 3306,
     'dbname' => 'knowledge_city',
-    'username' => 'root',
-    'password' => ''
+    'username' => 'user',
+    'password' => 'password'
 ];

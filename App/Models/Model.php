@@ -23,6 +23,7 @@ class Model
     }
 
     /**
+     * @param $values
      * @return void
      */
     public function create($values): void

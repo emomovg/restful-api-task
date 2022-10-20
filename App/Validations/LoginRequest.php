@@ -11,6 +11,10 @@ class LoginRequest
      */
     private string $message;
 
+    /**
+     * @param  array  $data
+     * @return bool
+     */
     public function passes(array $data): bool
     {
         $login = $data['login'];
@@ -24,7 +28,7 @@ class LoginRequest
         }
 
         if (!password_verify($password, $user['password'])) {
-            $this->message = 'Incorrect password entered ';
+            $this->message = 'Incorrect password entered';
             return false;
         }
 
